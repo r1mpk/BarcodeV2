@@ -105,7 +105,7 @@
             // BtPreview
             // 
             this.BtPreview.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.BtPreview.Location = new System.Drawing.Point(272, 202);
+            this.BtPreview.Location = new System.Drawing.Point(272, 195);
             this.BtPreview.Name = "BtPreview";
             this.BtPreview.Size = new System.Drawing.Size(84, 34);
             this.BtPreview.TabIndex = 7;
@@ -121,6 +121,7 @@
             this.BtPrint.TabIndex = 8;
             this.BtPrint.Text = "Print";
             this.BtPrint.UseVisualStyleBackColor = true;
+            this.BtPrint.Click += new System.EventHandler(this.BtPrint_Click);
             // 
             // QuantityBox
             // 
@@ -164,7 +165,7 @@
             // ModelsComboBox
             // 
             this.ModelsComboBox.FormattingEnabled = true;
-            this.ModelsComboBox.Location = new System.Drawing.Point(12, 127);
+            this.ModelsComboBox.Location = new System.Drawing.Point(12, 130);
             this.ModelsComboBox.Name = "ModelsComboBox";
             this.ModelsComboBox.Size = new System.Drawing.Size(254, 23);
             this.ModelsComboBox.TabIndex = 13;

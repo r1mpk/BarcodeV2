@@ -11,6 +11,7 @@ namespace BarcodeV2
             InitializeComponent();
             //Initial Model List read
             RefreshMyList();
+           
         }
 
         private void BtAddNewModel_Click(object sender, EventArgs e)
@@ -114,6 +115,24 @@ namespace BarcodeV2
                 MessageBox.Show("Error: " + ex.Message);
             }
             
+        }
+        private string GenerateFullPartNum(string _partNum)
+        {
+            TodaysDate _today = new();
+            _today.GenerateTodaysDate();
+            _partNum = _partNum + _today.finval;
+            return _partNum;
+            //TO CREATE 0001 - quantity.ToString("D4")
+        }
+
+        private void BtPrint_Click(object sender, EventArgs e)
+        {
+            int quant = Int32.Parse(QuantityBox.Text);
+            string test = GenerateFullPartNum(ModelsComboBox.ValueMember);
+            for (int i = 1; i <= quant; i++)
+            {
+                Console.WriteLine(test + i.ToString("D4"));
+            }
         }
     }
     //Model Class
