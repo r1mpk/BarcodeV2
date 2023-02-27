@@ -6,6 +6,7 @@ namespace BarcodeV2
     {
         public readonly string filePath = @"Models.txt";
         public List<Model> models = new();
+        public string BarVal = string.Empty;
         public BarcodeWindow()
         {
             InitializeComponent();
@@ -33,7 +34,6 @@ namespace BarcodeV2
         private void BtRefreshButton_Click(object sender, EventArgs e)
         {
             RefreshMyList();
-
         }
         private void SaveDataToDataSource(Model _model)
         {
@@ -124,7 +124,6 @@ namespace BarcodeV2
             return _partNum;
             //TO CREATE 0001 - quantity.ToString("D4")
         }
-
         private void BtPrint_Click(object sender, EventArgs e)
         {
             int quant = Int32.Parse(QuantityBox.Text);
@@ -133,6 +132,37 @@ namespace BarcodeV2
             {
                 Console.WriteLine(test + i.ToString("D4"));
             }
+        }
+
+        private void BtPreview_Click(object sender, EventArgs e)
+        {
+            Zen.Barcode.Code128BarcodeDraw barcode = Zen.Barcode.BarcodeDrawFactory.Code128WithChecksum;
+            var barcodeImage = barcode.Draw(GenerateFullPartNum(BarVal), 50);
+
+            var resultImage = new Bitmap(barcodeImage.Width, barcodeImage.Height + 20); // 20 is bottom padding, adjust to your text
+
+            using (var graphics = Graphics.FromImage(resultImage))
+            using (var font = new Font("Consolas", 12))
+            using (var brush = new SolidBrush(Color.Black))
+            using (var format = new StringFormat()
+            {
+                Alignment = StringAlignment.Center, // Also, horizontally centered text, as in your example of the expected output
+                LineAlignment = StringAlignment.Far
+            })
+            {
+                graphics.Clear(Color.White);
+                graphics.DrawImage(barcodeImage, 0, 0);
+                graphics.DrawString(GenerateFullPartNum(BarVal), font, brush, resultImage.Width / 2, resultImage.Height, format);
+            }
+
+            BarcodePreview.Image = resultImage;
+        }
+
+        private void ModelsComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox cmb = (ComboBox)sender;
+            string selectedValue = ((Model)cmb.SelectedItem).MyPartNum.ToString();
+            BarVal = selectedValue;
         }
     }
     //Model Class

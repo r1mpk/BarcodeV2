@@ -111,6 +111,7 @@
             this.BtPreview.TabIndex = 7;
             this.BtPreview.Text = "Preview";
             this.BtPreview.UseVisualStyleBackColor = true;
+            this.BtPreview.Click += new System.EventHandler(this.BtPreview_Click);
             // 
             // BtPrint
             // 
@@ -164,11 +165,14 @@
             // 
             // ModelsComboBox
             // 
+            this.ModelsComboBox.DisplayMember = "MyModel";
             this.ModelsComboBox.FormattingEnabled = true;
             this.ModelsComboBox.Location = new System.Drawing.Point(12, 130);
             this.ModelsComboBox.Name = "ModelsComboBox";
             this.ModelsComboBox.Size = new System.Drawing.Size(254, 23);
             this.ModelsComboBox.TabIndex = 13;
+            this.ModelsComboBox.ValueMember = "MyPartNum";
+            this.ModelsComboBox.SelectedIndexChanged += new System.EventHandler(this.ModelsComboBox_SelectedIndexChanged);
             // 
             // BarcodeWindow
             // 
