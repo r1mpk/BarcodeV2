@@ -1,21 +1,131 @@
+using static System.Windows.Forms.LinkLabel;
+
 namespace BarcodeV2
 {
     public partial class BarcodeWindow : Form
     {
+        public readonly string filePath = @"Models.txt";
+        public List<Model> models = new();
         public BarcodeWindow()
         {
             InitializeComponent();
+            //Initial Model List read
+            RefreshMyList();
         }
 
-        private void ModelsListBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void BtAddNewModel_Click(object sender, EventArgs e)
         {
+            if (AddModelsID.Text != "" && AddModelsPN.Text != "")
+            {
+                Model _model = new(AddModelsID.Text, AddModelsPN.Text);
+                SaveDataToDataSource(_model);
+                AddModelsID.Clear();
+                AddModelsPN.Clear();
+                RefreshMyList();
+            }
+            else
+            {
+                MessageBox.Show("You can not add empty ID/PN.", "Error", MessageBoxButtons.OK);
+            }
 
+        }
+        private void BtRefreshButton_Click(object sender, EventArgs e)
+        {
+            RefreshMyList();
+
+        }
+        private void SaveDataToDataSource(Model _model)
+        {
+            using (StreamWriter _writer = File.AppendText(filePath))
+            {
+                _writer.WriteLine(_model.MyModel + "|" + _model.MyPartNum);
+            }
+        }
+        private void ReadDataFromDataSource(List<Model> _models)
+        {
+            _models.Clear();
+            using (StreamReader _reader = new(filePath))
+            {
+                string _line;
+                while ((_line = _reader.ReadLine()) != null)
+                {
+                    string[] _parts = _line.Split("|");
+                    if (_parts.Length == 2)
+                    {
+                        string _id = _parts[0];
+                        string _pn = _parts[1];
+                        Model _model = new(_id, _pn);
+                        _models.Add(_model);
+                    }
+                }
+            }
+        }
+        private void RefreshMyList()
+        {
+            ModelsComboBox.Text = "";
+            ReadDataFromDataSource(models);
+            ModelsComboBox.Items.Clear();
+            foreach(Model _model in models)
+            {
+                ModelsComboBox.Items.Add(_model);
+            }
+            ModelsComboBox.DisplayMember = "MyModel";
+            ModelsComboBox.ValueMember = "MyPartNum";
+            
+        }
+        private void BtDelete_Click(object sender, EventArgs e)
+        {
+            string _searchedValue = ((BarcodeV2.Model)ModelsComboBox.SelectedItem).MyModel.ToString();
+            List<string> _lines = new();          
+            try
+            {
+                using (StreamReader _reader = new(filePath))
+                {
+                    string _line;
+                    while ((_line = _reader.ReadLine()) != null)
+                    {
+                        _lines.Add(_line);
+                    }
+
+                }
+                int _index = _lines.FindIndex(_line => _line.Split('|')[0] == _searchedValue);
+                if (_index >= 0)
+                {
+                    _lines.RemoveAt(_index);
+                    using (StreamWriter _writer = new(filePath))
+                    {
+                        foreach (string line in _lines)
+                        {
+                            _writer.WriteLine(line);
+                        }
+                    }
+                    MessageBox.Show("Line Deleted Successfully!");
+                    RefreshMyList();
+                } else
+                {
+                    MessageBox.Show("Line Not Found!");
+                }
+                
+                
+                
+            }
+            catch (IOException ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+            
         }
     }
+    //Model Class
     public class Model
     {
         private readonly string myModel;
         private readonly string myPartNum;
+        public Model()
+        {
+            this.myModel = string.Empty;
+            this.myPartNum = string.Empty;
+        }
         public Model(string strModel, string strPartNum)
         {
             this.myModel = strModel;
@@ -30,6 +140,7 @@ namespace BarcodeV2
             get { return myPartNum; }
         }
     }
+    //Date Class for 3 YMD characters in barcode
     public class TodaysDate
     {
         public string finval = string.Empty;
@@ -73,8 +184,4 @@ namespace BarcodeV2
             finval = new string(finDateX);
         }
     }
-    /*public class DataFile{
-        string folderPath = @"C:\"
-    }
-    */
 }

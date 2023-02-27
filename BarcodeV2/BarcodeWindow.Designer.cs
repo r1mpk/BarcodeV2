@@ -28,29 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.ModelsListBox = new System.Windows.Forms.ListBox();
+            this.components = new System.ComponentModel.Container();
+            this.modelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.AddModelsID = new System.Windows.Forms.TextBox();
             this.AddModelsPN = new System.Windows.Forms.TextBox();
             this.AddModelsIDLabel = new System.Windows.Forms.Label();
             this.AddModelsPNLabel = new System.Windows.Forms.Label();
-            this.btAddNewModel = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.btPreview = new System.Windows.Forms.Button();
-            this.btPrint = new System.Windows.Forms.Button();
+            this.BtAddNewModel = new System.Windows.Forms.Button();
+            this.BarcodePreview = new System.Windows.Forms.PictureBox();
+            this.BtPreview = new System.Windows.Forms.Button();
+            this.BtPrint = new System.Windows.Forms.Button();
             this.QuantityBox = new System.Windows.Forms.TextBox();
             this.QuantityLabel = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.BtRefreshButton = new System.Windows.Forms.Button();
+            this.modelBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.btDelete = new System.Windows.Forms.Button();
+            this.ModelsComboBox = new System.Windows.Forms.ComboBox();
+            ((System.ComponentModel.ISupportInitialize)(this.modelBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BarcodePreview)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.modelBindingSource1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // ModelsListBox
-            // 
-            this.ModelsListBox.FormattingEnabled = true;
-            this.ModelsListBox.ItemHeight = 15;
-            this.ModelsListBox.Location = new System.Drawing.Point(12, 138);
-            this.ModelsListBox.Name = "ModelsListBox";
-            this.ModelsListBox.Size = new System.Drawing.Size(254, 34);
-            this.ModelsListBox.TabIndex = 0;
-            this.ModelsListBox.SelectedIndexChanged += new System.EventHandler(this.ModelsListBox_SelectedIndexChanged);
             // 
             // AddModelsID
             // 
@@ -58,6 +55,7 @@
             this.AddModelsID.Name = "AddModelsID";
             this.AddModelsID.Size = new System.Drawing.Size(254, 23);
             this.AddModelsID.TabIndex = 1;
+            this.AddModelsID.Text = " ";
             // 
             // AddModelsPN
             // 
@@ -86,42 +84,43 @@
             this.AddModelsPNLabel.Text = "Insert Model PN";
             this.AddModelsPNLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // btAddNewModel
+            // BtAddNewModel
             // 
-            this.btAddNewModel.Location = new System.Drawing.Point(272, 361);
-            this.btAddNewModel.Name = "btAddNewModel";
-            this.btAddNewModel.Size = new System.Drawing.Size(84, 68);
-            this.btAddNewModel.TabIndex = 5;
-            this.btAddNewModel.Text = "Add New Model";
-            this.btAddNewModel.UseVisualStyleBackColor = true;
+            this.BtAddNewModel.Location = new System.Drawing.Point(272, 361);
+            this.BtAddNewModel.Name = "BtAddNewModel";
+            this.BtAddNewModel.Size = new System.Drawing.Size(84, 68);
+            this.BtAddNewModel.TabIndex = 5;
+            this.BtAddNewModel.Text = "Add New Model";
+            this.BtAddNewModel.UseVisualStyleBackColor = true;
+            this.BtAddNewModel.Click += new System.EventHandler(this.BtAddNewModel_Click);
             // 
-            // pictureBox1
+            // BarcodePreview
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(12, 12);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(349, 93);
-            this.pictureBox1.TabIndex = 6;
-            this.pictureBox1.TabStop = false;
+            this.BarcodePreview.Location = new System.Drawing.Point(12, 12);
+            this.BarcodePreview.Name = "BarcodePreview";
+            this.BarcodePreview.Size = new System.Drawing.Size(349, 93);
+            this.BarcodePreview.TabIndex = 6;
+            this.BarcodePreview.TabStop = false;
             // 
-            // btPreview
+            // BtPreview
             // 
-            this.btPreview.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.btPreview.Location = new System.Drawing.Point(272, 138);
-            this.btPreview.Name = "btPreview";
-            this.btPreview.Size = new System.Drawing.Size(84, 34);
-            this.btPreview.TabIndex = 7;
-            this.btPreview.Text = "Preview";
-            this.btPreview.UseVisualStyleBackColor = true;
+            this.BtPreview.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.BtPreview.Location = new System.Drawing.Point(272, 202);
+            this.BtPreview.Name = "BtPreview";
+            this.BtPreview.Size = new System.Drawing.Size(84, 34);
+            this.BtPreview.TabIndex = 7;
+            this.BtPreview.Text = "Preview";
+            this.BtPreview.UseVisualStyleBackColor = true;
             // 
-            // btPrint
+            // BtPrint
             // 
-            this.btPrint.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.btPrint.Location = new System.Drawing.Point(12, 241);
-            this.btPrint.Name = "btPrint";
-            this.btPrint.Size = new System.Drawing.Size(344, 85);
-            this.btPrint.TabIndex = 8;
-            this.btPrint.Text = "Print";
-            this.btPrint.UseVisualStyleBackColor = true;
+            this.BtPrint.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.BtPrint.Location = new System.Drawing.Point(12, 241);
+            this.BtPrint.Name = "BtPrint";
+            this.BtPrint.Size = new System.Drawing.Size(344, 85);
+            this.BtPrint.TabIndex = 8;
+            this.BtPrint.Text = "Print";
+            this.BtPrint.UseVisualStyleBackColor = true;
             // 
             // QuantityBox
             // 
@@ -140,42 +139,82 @@
             this.QuantityLabel.Text = "Insert Quantity";
             this.QuantityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // BtRefreshButton
+            // 
+            this.BtRefreshButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.BtRefreshButton.Location = new System.Drawing.Point(272, 111);
+            this.BtRefreshButton.Name = "BtRefreshButton";
+            this.BtRefreshButton.Size = new System.Drawing.Size(84, 27);
+            this.BtRefreshButton.TabIndex = 11;
+            this.BtRefreshButton.Text = "Refresh";
+            this.BtRefreshButton.UseVisualStyleBackColor = true;
+            this.BtRefreshButton.Click += new System.EventHandler(this.BtRefreshButton_Click);
+            // 
+            // btDelete
+            // 
+            this.btDelete.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btDelete.Location = new System.Drawing.Point(272, 144);
+            this.btDelete.Name = "btDelete";
+            this.btDelete.Size = new System.Drawing.Size(84, 26);
+            this.btDelete.TabIndex = 12;
+            this.btDelete.Text = "Delete";
+            this.btDelete.UseVisualStyleBackColor = true;
+            this.btDelete.Click += new System.EventHandler(this.BtDelete_Click);
+            // 
+            // ModelsComboBox
+            // 
+            this.ModelsComboBox.FormattingEnabled = true;
+            this.ModelsComboBox.Location = new System.Drawing.Point(12, 127);
+            this.ModelsComboBox.Name = "ModelsComboBox";
+            this.ModelsComboBox.Size = new System.Drawing.Size(254, 23);
+            this.ModelsComboBox.TabIndex = 13;
+            // 
             // BarcodeWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(374, 450);
+            this.Controls.Add(this.ModelsComboBox);
+            this.Controls.Add(this.btDelete);
+            this.Controls.Add(this.BtRefreshButton);
             this.Controls.Add(this.QuantityLabel);
             this.Controls.Add(this.QuantityBox);
-            this.Controls.Add(this.btPrint);
-            this.Controls.Add(this.btPreview);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.btAddNewModel);
+            this.Controls.Add(this.BtPrint);
+            this.Controls.Add(this.BtPreview);
+            this.Controls.Add(this.BarcodePreview);
+            this.Controls.Add(this.BtAddNewModel);
             this.Controls.Add(this.AddModelsPNLabel);
             this.Controls.Add(this.AddModelsIDLabel);
             this.Controls.Add(this.AddModelsPN);
             this.Controls.Add(this.AddModelsID);
-            this.Controls.Add(this.ModelsListBox);
             this.Name = "BarcodeWindow";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "BarcodeApp";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.modelBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.BarcodePreview)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.modelBindingSource1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private ListBox ModelsListBox;
         private TextBox AddModelsID;
         private TextBox AddModelsPN;
         private Label AddModelsIDLabel;
         private Label AddModelsPNLabel;
-        private Button btAddNewModel;
-        private PictureBox pictureBox1;
-        private Button btPreview;
-        private Button btPrint;
+        private Button BtAddNewModel;
+        private PictureBox BarcodePreview;
+        private Button BtPreview;
+        private Button BtPrint;
         private TextBox QuantityBox;
         private Label QuantityLabel;
+        private Button BtRefreshButton;
+        private BindingSource modelBindingSource;
+        private BindingSource modelBindingSource1;
+        private Button btDelete;
+        private ComboBox ModelsComboBox;
     }
 }
