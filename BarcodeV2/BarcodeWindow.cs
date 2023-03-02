@@ -1,5 +1,4 @@
-using System.Drawing.Printing;
-using static System.Windows.Forms.LinkLabel;
+using System.Drawing.Drawing2D;
 
 namespace BarcodeV2
 {
@@ -13,7 +12,7 @@ namespace BarcodeV2
             InitializeComponent();
             //Initial Model List read
             RefreshMyList();
-           
+
         }
 
         private void BtAddNewModel_Click(object sender, EventArgs e)
@@ -67,18 +66,18 @@ namespace BarcodeV2
             ModelsComboBox.Text = "";
             ReadDataFromDataSource(models);
             ModelsComboBox.Items.Clear();
-            foreach(Model _model in models)
+            foreach (Model _model in models)
             {
                 ModelsComboBox.Items.Add(_model);
             }
             ModelsComboBox.DisplayMember = "MyModel";
             ModelsComboBox.ValueMember = "MyPartNum";
-            
+
         }
         private void BtDelete_Click(object sender, EventArgs e)
         {
             string _searchedValue = ((BarcodeV2.Model)ModelsComboBox.SelectedItem).MyModel.ToString();
-            List<string> _lines = new();          
+            List<string> _lines = new();
             try
             {
                 using (StreamReader _reader = new(filePath))
@@ -103,19 +102,20 @@ namespace BarcodeV2
                     }
                     MessageBox.Show("Line Deleted Successfully!");
                     RefreshMyList();
-                } else
+                }
+                else
                 {
                     MessageBox.Show("Line Not Found!");
                 }
-                
-                
-                
+
+
+
             }
             catch (IOException ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
             }
-            
+
         }
         private string GenerateFullPartNum(string _partNum)
         {
@@ -128,18 +128,18 @@ namespace BarcodeV2
         private void BtPrint_Click(object sender, EventArgs e)
         {
             int _quant = Int32.Parse(QuantityBox.Text);
-            for(int i = 1; i <= _quant; i++)
+            for (int i = 1; i <= _quant; i++)
             {
                 var printDocument = new System.Drawing.Printing.PrintDocument();
                 printDocument.PrintPage += (sender, e) =>
                 {
                     string finalValBarcode = GenerateFullPartNum(BarVal).Substring(0, 17);
-                    finalValBarcode += i.ToString("D4"); 
+                    finalValBarcode += i.ToString("D4");
                     e.Graphics.DrawImage(BarcodeGen(finalValBarcode), new Point(0, 0)); // draw the image at the top-left corner of the page
                 };
                 printDocument.Print();
             }
-            
+
         }
         private void BtPreview_Click(object sender, EventArgs e)
         {
@@ -156,11 +156,9 @@ namespace BarcodeV2
         {
             Zen.Barcode.Code93BarcodeDraw barcode = Zen.Barcode.BarcodeDrawFactory.Code93WithChecksum;
             var barcodeImage = barcode.Draw(_barcodeText, 50);
-
-            var resultImage = new Bitmap(barcodeImage.Width, barcodeImage.Height + 20); // 20 is bottom padding, adjust to your text
-
+            var resultImage = new Bitmap(barcodeImage.Width, barcodeImage.Height + 14); // 20 is bottom padding, adjust to your text
             using (var graphics = Graphics.FromImage(resultImage))
-            using (var font = new Font("Consolas", 12))
+            using (var font = new Font("Consolas", 8))
             using (var brush = new SolidBrush(Color.Black))
             using (var format = new StringFormat()
             {
@@ -168,11 +166,20 @@ namespace BarcodeV2
                 LineAlignment = StringAlignment.Far
             })
             {
+                graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
                 graphics.Clear(Color.White);
                 graphics.DrawImage(barcodeImage, 0, 0);
                 graphics.DrawString(_barcodeText, font, brush, resultImage.Width / 2, resultImage.Height, format);
             }
-            return resultImage;
+            var finResultImage = new Bitmap(150,45);
+            using (Graphics gr = Graphics.FromImage(finResultImage))
+            {
+                gr.SmoothingMode = SmoothingMode.HighQuality;
+                gr.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                gr.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                gr.DrawImage(resultImage, new Rectangle(0, 0, 150, 45));
+            }
+            return finResultImage;
         }
     }
     //Model Class
@@ -240,7 +247,7 @@ namespace BarcodeV2
 
                 }
             }
-             return finval = new string(finDateX);
+            return finval = new string(finDateX);
         }
     }
 }
