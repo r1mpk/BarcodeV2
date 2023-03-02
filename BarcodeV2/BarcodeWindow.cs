@@ -127,17 +127,35 @@ namespace BarcodeV2
         }
         private void BtPrint_Click(object sender, EventArgs e)
         {
-            var printDocument = new System.Drawing.Printing.PrintDocument();
-            printDocument.PrintPage += (sender, e) =>
+            int _quant = Int32.Parse(QuantityBox.Text);
+            for(int i = 1; i <= _quant; i++)
             {
-                e.Graphics.DrawImage(BarcodePreview.Image, new Point(0, 0)); // draw the image at the top-left corner of the page
-            };
-            printDocument.Print();
+                var printDocument = new System.Drawing.Printing.PrintDocument();
+                printDocument.PrintPage += (sender, e) =>
+                {
+                    string finalValBarcode = GenerateFullPartNum(BarVal).Substring(0, 17);
+                    finalValBarcode += i.ToString("D4"); 
+                    e.Graphics.DrawImage(BarcodeGen(finalValBarcode), new Point(0, 0)); // draw the image at the top-left corner of the page
+                };
+                printDocument.Print();
+            }
+            
         }
         private void BtPreview_Click(object sender, EventArgs e)
         {
-            Zen.Barcode.Code128BarcodeDraw barcode = Zen.Barcode.BarcodeDrawFactory.Code128WithChecksum;
-            var barcodeImage = barcode.Draw(GenerateFullPartNum(BarVal), 50);
+            BarcodePreview.Image = BarcodeGen(GenerateFullPartNum(BarVal));
+        }
+
+        private void ModelsComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox cmb = (ComboBox)sender;
+            string selectedValue = ((Model)cmb.SelectedItem).MyPartNum.ToString();
+            BarVal = selectedValue;
+        }
+        private Bitmap BarcodeGen(string _barcodeText)
+        {
+            Zen.Barcode.Code93BarcodeDraw barcode = Zen.Barcode.BarcodeDrawFactory.Code93WithChecksum;
+            var barcodeImage = barcode.Draw(_barcodeText, 50);
 
             var resultImage = new Bitmap(barcodeImage.Width, barcodeImage.Height + 20); // 20 is bottom padding, adjust to your text
 
@@ -152,17 +170,9 @@ namespace BarcodeV2
             {
                 graphics.Clear(Color.White);
                 graphics.DrawImage(barcodeImage, 0, 0);
-                graphics.DrawString(GenerateFullPartNum(BarVal), font, brush, resultImage.Width / 2, resultImage.Height, format);
+                graphics.DrawString(_barcodeText, font, brush, resultImage.Width / 2, resultImage.Height, format);
             }
-
-            BarcodePreview.Image = resultImage;
-        }
-
-        private void ModelsComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ComboBox cmb = (ComboBox)sender;
-            string selectedValue = ((Model)cmb.SelectedItem).MyPartNum.ToString();
-            BarVal = selectedValue;
+            return resultImage;
         }
     }
     //Model Class
@@ -194,43 +204,43 @@ namespace BarcodeV2
     {
         public string finval = string.Empty;
 
-        public void GenerateTodaysDate()
+        public string GenerateTodaysDate()
         {
             DateTime thisDay = DateTime.Today;
             int year = thisDay.Year - 2020;
             int month = thisDay.Month;
             int day = thisDay.Day;
-            char[] finDateX = { 'E', 'R', 'R' };
-            finDateX[0] = Convert.ToChar(year + 48);
+            string finDateX = string.Empty;
+            finDateX += Convert.ToChar(year + 48);
             if (month <= 9)
             {
-                finDateX[1] = Convert.ToChar(month + 48);
+                finDateX += Convert.ToChar(month + 48);
             }
             else
             {
-                finDateX[1] = Convert.ToChar(month + 64);
+                finDateX += Convert.ToChar(month + 64);
             }
             if (day <= 9)
             {
-                finDateX[1] = Convert.ToChar(day + 48);
+                finDateX += Convert.ToChar(day + 48);
             }
             else
             {
                 if (day > 9 && day < 18)
                 {
-                    finDateX[2] = Convert.ToChar(day + 64);
+                    finDateX += Convert.ToChar(day + 64);
                 }
                 else if (day > 17 && day < 24)
                 {
-                    finDateX[2] = Convert.ToChar(day + 65);
+                    finDateX += Convert.ToChar(day + 65);
                 }
                 else if (day > 24)
                 {
-                    finDateX[2] = Convert.ToChar(day + 66);
+                    finDateX += Convert.ToChar(day + 66);
 
                 }
             }
-            finval = new string(finDateX);
+             return finval = new string(finDateX);
         }
     }
 }
