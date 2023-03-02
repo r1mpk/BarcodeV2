@@ -1,3 +1,4 @@
+using System.Drawing.Printing;
 using static System.Windows.Forms.LinkLabel;
 
 namespace BarcodeV2
@@ -120,20 +121,19 @@ namespace BarcodeV2
         {
             TodaysDate _today = new();
             _today.GenerateTodaysDate();
-            _partNum = _partNum + _today.finval;
+            _partNum = _partNum + "PTS" + _today.finval + "0001";
             return _partNum;
             //TO CREATE 0001 - quantity.ToString("D4")
         }
         private void BtPrint_Click(object sender, EventArgs e)
         {
-            int quant = Int32.Parse(QuantityBox.Text);
-            string test = GenerateFullPartNum(ModelsComboBox.ValueMember);
-            for (int i = 1; i <= quant; i++)
+            var printDocument = new System.Drawing.Printing.PrintDocument();
+            printDocument.PrintPage += (sender, e) =>
             {
-                Console.WriteLine(test + i.ToString("D4"));
-            }
+                e.Graphics.DrawImage(BarcodePreview.Image, new Point(0, 0)); // draw the image at the top-left corner of the page
+            };
+            printDocument.Print();
         }
-
         private void BtPreview_Click(object sender, EventArgs e)
         {
             Zen.Barcode.Code128BarcodeDraw barcode = Zen.Barcode.BarcodeDrawFactory.Code128WithChecksum;
