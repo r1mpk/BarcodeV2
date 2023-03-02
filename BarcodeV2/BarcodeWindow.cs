@@ -166,20 +166,14 @@ namespace BarcodeV2
                 LineAlignment = StringAlignment.Far
             })
             {
-                graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
                 graphics.Clear(Color.White);
                 graphics.DrawImage(barcodeImage, 0, 0);
                 graphics.DrawString(_barcodeText, font, brush, resultImage.Width / 2, resultImage.Height, format);
             }
-            var finResultImage = new Bitmap(150,45);
-            using (Graphics gr = Graphics.FromImage(finResultImage))
-            {
-                gr.SmoothingMode = SmoothingMode.HighQuality;
-                gr.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                gr.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                gr.DrawImage(resultImage, new Rectangle(0, 0, 150, 45));
-            }
-            return finResultImage;
+            return resultImage;
         }
     }
     //Model Class
