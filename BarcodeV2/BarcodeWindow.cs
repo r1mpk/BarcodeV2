@@ -92,7 +92,6 @@ namespace BarcodeV2
             {
                 _quant = 1;
             }
-
                 for (int i = 1; i <= _quant; i++)
             {
                 var printDocument = new System.Drawing.Printing.PrintDocument();
