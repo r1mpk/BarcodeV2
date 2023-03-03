@@ -17,7 +17,7 @@ namespace BarcodeV2
 
         private void BtAddNewModel_Click(object sender, EventArgs e)
         {
-            if (AddModelsID.Text != "" && AddModelsPN.Text != "")
+            if (AddModelsID.Text != string.Empty && AddModelsPN.Text != string.Empty)
             {
                 Model _model = new(AddModelsID.Text, AddModelsPN.Text);
                 SaveDataToDataSource(_model);
@@ -31,49 +31,12 @@ namespace BarcodeV2
             }
 
         }
+
         private void BtRefreshButton_Click(object sender, EventArgs e)
         {
             RefreshMyList();
         }
-        private void SaveDataToDataSource(Model _model)
-        {
-            using (StreamWriter _writer = File.AppendText(filePath))
-            {
-                _writer.WriteLine(_model.MyModel + "|" + _model.MyPartNum);
-            }
-        }
-        private void ReadDataFromDataSource(List<Model> _models)
-        {
-            _models.Clear();
-            using (StreamReader _reader = new(filePath))
-            {
-                string _line;
-                while ((_line = _reader.ReadLine()) != null)
-                {
-                    string[] _parts = _line.Split("|");
-                    if (_parts.Length == 2)
-                    {
-                        string _id = _parts[0];
-                        string _pn = _parts[1];
-                        Model _model = new(_id, _pn);
-                        _models.Add(_model);
-                    }
-                }
-            }
-        }
-        private void RefreshMyList()
-        {
-            ModelsComboBox.Text = "";
-            ReadDataFromDataSource(models);
-            ModelsComboBox.Items.Clear();
-            foreach (Model _model in models)
-            {
-                ModelsComboBox.Items.Add(_model);
-            }
-            ModelsComboBox.DisplayMember = "MyModel";
-            ModelsComboBox.ValueMember = "MyPartNum";
-
-        }
+        //Delete Model from the list
         private void BtDelete_Click(object sender, EventArgs e)
         {
             string _searchedValue = ((BarcodeV2.Model)ModelsComboBox.SelectedItem).MyModel.ToString();
@@ -117,16 +80,10 @@ namespace BarcodeV2
             }
 
         }
-        private string GenerateFullPartNum(string _partNum)
-        {
-            TodaysDate _today = new();
-            _today.GenerateTodaysDate();
-            _partNum = _partNum + "PTS" + _today.finval + "0001";
-            return _partNum;
-            //TO CREATE 0001 - quantity.ToString("D4")
-        }
+        //Print
         private void BtPrint_Click(object sender, EventArgs e)
         {
+            //Print selected quantity at the top left corner of a page
             int _quant = Int32.Parse(QuantityBox.Text);
             for (int i = 1; i <= _quant; i++)
             {
@@ -141,31 +98,86 @@ namespace BarcodeV2
             }
 
         }
+        //Display barcode preview in the program
         private void BtPreview_Click(object sender, EventArgs e)
         {
             BarcodePreview.Image = BarcodeGen(GenerateFullPartNum(BarVal));
+            //Stretch to fill the whole preview box
+            BarcodePreview.SizeMode = PictureBoxSizeMode.StretchImage;
         }
-
+        //Change Select index so the Selected Value also changes
         private void ModelsComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboBox cmb = (ComboBox)sender;
             string selectedValue = ((Model)cmb.SelectedItem).MyPartNum.ToString();
             BarVal = selectedValue;
         }
+        //Save the data to the Models.txt
+        private void SaveDataToDataSource(Model _model)
+        {
+            using (StreamWriter _writer = File.AppendText(filePath))
+            {
+                _writer.WriteLine(_model.MyModel + "|" + _model.MyPartNum);
+            }
+        }
+        //Read the data to the Models.txt
+        private void ReadDataFromDataSource(List<Model> _models)
+        {
+            _models.Clear();
+            using (StreamReader _reader = new(filePath))
+            {
+                string _line;
+                while ((_line = _reader.ReadLine()) != null)
+                {
+                    string[] _parts = _line.Split("|");
+                    if (_parts.Length == 2)
+                    {
+                        string _id = _parts[0];
+                        string _pn = _parts[1];
+                        Model _model = new(_id, _pn);
+                        _models.Add(_model);
+                    }
+                }
+            }
+        }
+        //ComboBox list refresher
+        private void RefreshMyList()
+        {
+            ModelsComboBox.Text = "";
+            ReadDataFromDataSource(models);
+            ModelsComboBox.Items.Clear();
+            foreach (Model _model in models)
+            {
+                ModelsComboBox.Items.Add(_model);
+            }
+            ModelsComboBox.DisplayMember = "MyModel";
+            ModelsComboBox.ValueMember = "MyPartNum";
+
+        }
+        private string GenerateFullPartNum(string _partNum)
+        {
+            //Generate full part number for printing
+            TodaysDate _today = new();
+            _today.GenerateTodaysDate();
+            _partNum = _partNum + "PTS" + _today.finval + "0001";
+            return _partNum;
+        }
+        //Generate High Quality Barcode with Text Underneath
         private Bitmap BarcodeGen(string _barcodeText)
         {
             Zen.Barcode.Code93BarcodeDraw barcode = Zen.Barcode.BarcodeDrawFactory.Code93WithChecksum;
             var barcodeImage = barcode.Draw(_barcodeText, 50);
-            var resultImage = new Bitmap(barcodeImage.Width, barcodeImage.Height + 14); // 20 is bottom padding, adjust to your text
+            var resultImage = new Bitmap(barcodeImage.Width, barcodeImage.Height + 14); // Bottom Padding
             using (var graphics = Graphics.FromImage(resultImage))
             using (var font = new Font("Consolas", 8))
             using (var brush = new SolidBrush(Color.Black))
             using (var format = new StringFormat()
             {
-                Alignment = StringAlignment.Center, // Also, horizontally centered text, as in your example of the expected output
+                Alignment = StringAlignment.Center,
                 LineAlignment = StringAlignment.Far
             })
             {
+                //Best Quality possible settings
                 graphics.CompositingQuality = CompositingQuality.HighQuality;
                 graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 graphics.SmoothingMode = SmoothingMode.HighQuality;
