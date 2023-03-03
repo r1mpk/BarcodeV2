@@ -178,7 +178,6 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(374, 450);
             this.Controls.Add(this.ModelsComboBox);
@@ -194,6 +193,8 @@
             this.Controls.Add(this.AddModelsIDLabel);
             this.Controls.Add(this.AddModelsPN);
             this.Controls.Add(this.AddModelsID);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.MaximizeBox = false;
             this.Name = "BarcodeWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "BarcodeApp";

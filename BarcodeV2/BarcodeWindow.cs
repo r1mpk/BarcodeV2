@@ -1,4 +1,5 @@
 using System.Drawing.Drawing2D;
+using System.Drawing.Printing;
 
 namespace BarcodeV2
 {
@@ -31,7 +32,6 @@ namespace BarcodeV2
             }
 
         }
-
         private void BtRefreshButton_Click(object sender, EventArgs e)
         {
             RefreshMyList();
@@ -83,9 +83,17 @@ namespace BarcodeV2
         //Print
         private void BtPrint_Click(object sender, EventArgs e)
         {
+            int _quant = 1;
             //Print selected quantity at the top left corner of a page
-            int _quant = Int32.Parse(QuantityBox.Text);
-            for (int i = 1; i <= _quant; i++)
+            try
+            {
+                _quant = Int32.Parse(QuantityBox.Text);
+            } catch (FormatException ex)
+            {
+                _quant = 1;
+            }
+
+                for (int i = 1; i <= _quant; i++)
             {
                 var printDocument = new System.Drawing.Printing.PrintDocument();
                 printDocument.PrintPage += (sender, e) =>
@@ -154,6 +162,7 @@ namespace BarcodeV2
             ModelsComboBox.ValueMember = "MyPartNum";
 
         }
+        //Selected model + PTS + Date + Serial num
         private string GenerateFullPartNum(string _partNum)
         {
             //Generate full part number for printing
@@ -185,6 +194,7 @@ namespace BarcodeV2
                 graphics.DrawImage(barcodeImage, 0, 0);
                 graphics.DrawString(_barcodeText, font, brush, resultImage.Width / 2, resultImage.Height, format);
             }
+            
             return resultImage;
         }
     }
