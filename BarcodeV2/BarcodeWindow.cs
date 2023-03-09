@@ -176,10 +176,10 @@ namespace BarcodeV2
             Zen.Barcode.Code93BarcodeDraw barcode = Zen.Barcode.BarcodeDrawFactory.Code93WithChecksum;
             var barcodeImage = barcode.Draw(_barcodeText, 50);
             var resultImage = new Bitmap(barcodeImage.Width, barcodeImage.Height + 14); // Bottom Padding
-            using (var graphics = Graphics.FromImage(resultImage))
-            using (var font = new Font("Consolas", 8))
-            using (var brush = new SolidBrush(Color.Black))
-            using (var format = new StringFormat()
+            using (var graphics = Graphics.FromImage(resultImage))                      // Generate graphic from image
+            using (var font = new Font("Consolas", 8))                                  // Choose font and size of it
+            using (var brush = new SolidBrush(Color.Black))                             // Choose Color
+            using (var format = new StringFormat()                                      // Choose string formatting
             {
                 Alignment = StringAlignment.Center,
                 LineAlignment = StringAlignment.Far
